@@ -1,16 +1,15 @@
-﻿using System;
+﻿using Leap;
+using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Leap;
 
-namespace ProjectLeapBlue {
-	public class Program {
-
-		private static void Main(string[] args) {
+namespace LeapFlight {
+	class Program {
+		static void Main(string[] args) {
 			// Init outgoing connection to HC-06 Bluetooth module.
 			SerialPort serialPort = new SerialPort();
 			serialPort.PortName = "COM13";
@@ -27,7 +26,7 @@ namespace ProjectLeapBlue {
 			Controller controller = new Controller();
 
 			while (serialPort.IsOpen) {
-				
+
 				if (serialPort.BytesToRead > 0) {
 					// If our Arduino is ready to receive the drone commands - synchronisation.
 					if (serialPort.ReadChar().Equals('1')) {
@@ -58,8 +57,6 @@ namespace ProjectLeapBlue {
 					}
 				}
 
-
-				//serialPort.Write("1"); // From http://stackoverflow.com/questions/8289804/can-i-send-a-int-by-serialport-in-c
 				Thread.Sleep(150);
 			}
 		}
