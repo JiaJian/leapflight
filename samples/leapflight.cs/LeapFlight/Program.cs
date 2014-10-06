@@ -8,8 +8,13 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace LeapFlight {
-	class Program {
-		static void Main(string[] args) {
+	public class Program {
+
+		public static double map(double value) {
+			return value / 180 * 250;
+		}
+
+		public static void Main(string[] args) {
 			// Init outgoing connection to HC-06 Bluetooth module.
 			SerialPort serialPort = new SerialPort();
 			serialPort.PortName = "COM13";
@@ -46,12 +51,15 @@ namespace LeapFlight {
 								var roll = normal.Roll * 180.0f / (float)Math.PI;
 								var yaw = direction.Yaw * 180.0f / (float)Math.PI;
 
+								var x = map(pitch);
+								var y = map(roll);
+
 								Console.WriteLine("LeapMotion>  Hand pitch: " + pitch + " degrees, "
 											+ "roll: " + roll + " degrees, "
 											+ "yaw: " + yaw + " degrees");
 
 								Console.WriteLine("SerialPort> Sending stuff... ");
-								serialPort.Write(pitch.ToString() + "\n" + roll.ToString() + "\n");
+								serialPort.Write(x.ToString() + "\n" + y.ToString() + "\n");
 							}
 						}
 					}
