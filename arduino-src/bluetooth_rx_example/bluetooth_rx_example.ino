@@ -30,8 +30,6 @@ void loop() {
       
       data = "";
     }
-    
   }
-  delay(150);
+  delay(400);
 }
-
