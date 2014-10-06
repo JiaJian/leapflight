@@ -20,7 +20,7 @@ namespace LeapFlight {
 
 			// And so it begins...
 			if (serialPort.IsOpen) {
-				Console.WriteLine("Outgoing> Yay! Connected to the Arduino. :D");
+				Console.WriteLine("SerialPort> Yay! Connected to the Arduino. :D");
 			}
 
 			Controller controller = new Controller();
@@ -30,7 +30,7 @@ namespace LeapFlight {
 				if (serialPort.BytesToRead > 0) {
 					// If our Arduino is ready to receive the drone commands - synchronisation.
 					if (serialPort.ReadChar().Equals('1')) {
-						Console.WriteLine("Incoming> Handshaking request received! Should I transmit data over?");
+						Console.WriteLine("SerialPort> Handshaking request received! Should I transmit data over?");
 
 						foreach (Hand hand in controller.Frame().Hands) {
 							if (hand.IsLeft) {
@@ -50,7 +50,7 @@ namespace LeapFlight {
 											+ "roll: " + roll + " degrees, "
 											+ "yaw: " + yaw + " degrees");
 
-								Console.WriteLine("Outgoing> Sending stuff... ");
+								Console.WriteLine("SerialPort> Sending stuff... ");
 								serialPort.Write(pitch.ToString() + "\n" + roll.ToString() + "\n");
 							}
 						}
