@@ -17,15 +17,15 @@ int max_rec;
 int min_rec;
 int mid_rec;
 int ref_aux;
-int ele, ail,rud, x,y;
+int ele, ail, rud, x,y;
 
 int MILD = 100;
 int HARSH = 200;
-String Data = "";
+String data = "";
 int xx;
 int yy;
 
-int counter =0;
+int counter = 0;
 unsigned long lastTime;
 unsigned long currTime;
 unsigned long elapTime;
@@ -51,11 +51,10 @@ void setup() {
   }
   
   ref_aux = pulseIn(7, HIGH, 20000);
-  mid_rec = mid_rec / 10;//average
+  mid_rec = mid_rec / 10; // average
+  min_rec = mid_rec - 450; // minimum value
+  max_rec = mid_rec + 450; // maximum value
   mid_rec = 1500;
-  min_rec = mid_rec - 450;//minimum value
-  max_rec = mid_rec + 450;//maximum value
-
   digitalWrite(8, HIGH);
   fakePulse();
   delay(500);
@@ -75,21 +74,20 @@ void loop() {
 
   //check if aux switch is flipped. if so trigger auto pilot
   //if(recAUX > 0 && recAUX < (ref_aux - 400)  ){
-   if(1==1  ){ 
+   if (true) { 
     digitalWrite(LED,HIGH);
     read_wearable();
     rud = mid_rec;
-    if(recAIL > mid_rec + 50 || recAIL < mid_rec -50){
-      ail=recAIL;
+    if (recAIL > mid_rec + 50 || recAIL < mid_rec - 50){
+      ail = recAIL;
     }
-    if(recELE > mid_rec + 50 || recELE < mid_rec -50){
-      ele=recELE;
+    if (recELE > mid_rec + 50 || recELE < mid_rec - 50){
+      ele = recELE;
     }
-    if(recRUD > mid_rec + 50 || recRUD < mid_rec -50){
-      rud=recRUD;
+    if (recRUD > mid_rec + 50 || recRUD < mid_rec - 50){
+      rud = recRUD;
     }
   }
-
   else{
     //else, pass remote control signals to flight controller
     digitalWrite(LED, LOW);
@@ -97,6 +95,7 @@ void loop() {
     ele = recELE;
     rud = recRUD;
   }
+  
   // pass ail, ele, rud signal values from remote control to flight controller
   AIL.writeMicroseconds(ail);
   ELE.writeMicroseconds(ele);
@@ -128,58 +127,51 @@ void fakePulse() {
 }
 
 void read_wearable(){
-  Serial1.print(1);
-  while (Serial1.available())
-  {
+  
+  Serial1.print(1); // For transmitter to synchronise data tx
+  
+  while (Serial1.available()) {
     char character = Serial1.read(); // Receive a single character from the software serial port
-    Data.concat(character); // Add the received character to the receive buffer
-    if (character == '\n')
-    {
-      //Serial.print(Data);
-      if (counter == 0){
-        xx= Data.toInt();
+    data.concat(character); // Add the received character to the receive buffer
+    if (character == '\n') {
+      //Serial.print(data);
+      if (counter == 0) {
+        xx = data.toInt();
         counter = 1;
       }
-
-      else if (counter == 1){
-        yy= Data.toInt();
+      else if (counter == 1) {
+        yy = data.toInt();
         counter = 0;
       }
 
       // Add your code to parse the received line here....
 
       // Clear receive buffer so we're ready to receive the next line
-      Serial.print("Data    :");
-      Serial.println(Data.toInt());
-      Data = "";
+      data = "";
     }
-
   }
 
-  if(xx > 50){
+  if (xx > 50) {
     ail = mid_rec + xx;
   }
-  else if (xx < -50){
+  else if (xx < -50) {
     xx = abs(xx);
     ail = mid_rec - xx;
   }
-  else if( xx > -50 && xx < 50){
+  else if (xx > -50 && xx < 50) {
     ail = mid_rec;
   }
 
-  if(yy > 50){
+  if (yy > 50){
     ele = mid_rec + yy;
   }
-  else if(yy < -50){
+  else if (yy < -50) {
     yy = abs(yy);
     ele = mid_rec - yy;
   }
-  else if(yy > -50 && yy < 50){
+  else if (yy > -50 && yy < 50) {
     ele = mid_rec;
   }
-
-
-
 }
 //  switch(x){
 //  case 51:
