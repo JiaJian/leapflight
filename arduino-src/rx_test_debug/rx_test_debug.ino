@@ -49,13 +49,11 @@ void setup() {
   for (int i = 0; i < 10; i++) {
     mid_rec += recAIL;
   }
-  
   ref_aux = pulseIn(7, HIGH, 20000);
   mid_rec = mid_rec / 10;//average
-  mid_rec = 1500;
   min_rec = mid_rec - 450;//minimum value
   max_rec = mid_rec + 450;//maximum value
-
+  mid_rec = 1500;
   digitalWrite(8, HIGH);
   fakePulse();
   delay(500);
@@ -72,41 +70,7 @@ void loop() {
   recAUX = pulseIn(7, HIGH, 20000);
   //Keep reading from HC-05 and send to Arduino Serial Monitor
   //Serial.println(recAUX);
-
-  //check if aux switch is flipped. if so trigger auto pilot
-  //if(recAUX > 0 && recAUX < (ref_aux - 400)  ){
-   if(1==1  ){ 
-    digitalWrite(LED,HIGH);
-    read_wearable();
-    rud = mid_rec;
-    if(recAIL > mid_rec + 50 || recAIL < mid_rec -50){
-      ail=recAIL;
-    }
-    if(recELE > mid_rec + 50 || recELE < mid_rec -50){
-      ele=recELE;
-    }
-    if(recRUD > mid_rec + 50 || recRUD < mid_rec -50){
-      rud=recRUD;
-    }
-  }
-
-  else{
-    //else, pass remote control signals to flight controller
-    digitalWrite(LED, LOW);
-    ail = recAIL;
-    ele = recELE;
-    rud = recRUD;
-  }
-  // pass ail, ele, rud signal values from remote control to flight controller
-  AIL.writeMicroseconds(ail);
-  ELE.writeMicroseconds(ele);
-  THR.writeMicroseconds(recTHR);
-  RUD.writeMicroseconds(rud);
-  //  Serial.print(ail);
-  //  Serial.print('\t');
-  //  Serial.println(ele);
-
-
+  read_wearable();
   //Serial.println(elapTime);
   Serial.print(ail);
   Serial.print('\t');
@@ -149,8 +113,6 @@ void read_wearable(){
       // Add your code to parse the received line here....
 
       // Clear receive buffer so we're ready to receive the next line
-      Serial.print("Data    :");
-      Serial.println(Data.toInt());
       Data = "";
     }
 

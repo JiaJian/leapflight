@@ -19,6 +19,7 @@ serialPort.on('open', function() {
 	serialPort.on('data', function(data) {
 		console.log('SerialPort> Handshaking request received. (%s)', data);
 
+
 		// If incoming data is 1, we'll send the Leap Motion data over.
 		if (data == 1) {
 			var frame = controller.frame(); // Polls for the latest frame.
@@ -36,11 +37,47 @@ serialPort.on('open', function() {
 				var x		= map(roll).toPrecision(6);
 				var y		= map(pitch).toPrecision(6);
 
-				output = x + "\n" + y + "\n";
+
+				/* BEGIN dirty L/R mapping */
+				var lr = map(roll).toPrecision(6);
+				
+				if (lr < 0) {
+					//map the Right to -40
+					//nerf LR sensing when it is centered
+					if (lr > -5 && lr <= 0) {
+						lr = 0;
+					} else if (lr < 10 && lr >= 0) {
+						lr = 0;
+					}
+
+					if (lr < -40) lr = -40;
+
+					x = lr / 40.0 * 150.0;
+				} else {
+					if (lr > 80) lr = 80;
+					x = lr / 80.0 * 116.0;
+				}
+
+				
+				/* END dirty L/R mapping */
+
+				output = -1 * x + "\n" + -1 * y + "\n";
 
 				console.log("LeapMotion> Hand roll: %d deg, pitch: %d deg, yaw: %d deg", roll, pitch, yaw);
 				console.log("App> Roll to x: %d, pitch to y: %d\r\n", x, y);
+				
+				if (roll > 30) {
+					console.log("LeapMotion> Direction: Left");
+				} else if (roll < -20) {
+					console.log("LeapMotion> Direction: Right");
+				}
 
+				if (pitch > 30) {
+					console.log("LeapMotion> Direction: Backwards");
+				} else if (pitch < -30) {
+					console.log("LeapMotion> Direction: Forward");
+				}
+				
 				serialPort.write(output, function() {
 					// drain() will wait until all output data has been transmitted to serial port.
 					serialPort.drain(function(error) {
