@@ -1,7 +1,7 @@
 /**
  * leapflight-test
  * This js file does not contain Bluetooth comms, for testing before bringing it over to leapflight.js
- * @author Alvin Ng, James Tan, Jia Jian
+ * @author Jia Jian
  */
 var Leap = require('leapjs');
 

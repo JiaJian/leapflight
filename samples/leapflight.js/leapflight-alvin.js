@@ -1,7 +1,7 @@
 /**
  * Project Leapflight - enabling Leap Motion to control drones via a Bluetooth stack.
  * Part of the IDA Labs drones workshop.
- * @author Alvin Ng, James Tan, Jia Jian
+ * @author IDA Labs
  */
 var Leap = require('leapjs');
 var SerialPort = require('serialport').SerialPort;
