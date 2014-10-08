@@ -54,7 +54,7 @@ void setup() {
   mid_rec = mid_rec / 10; // average
   min_rec = mid_rec - 450; // minimum value
   max_rec = mid_rec + 450; // maximum value
-  mid_rec = 1500;
+  //mid_rec = 1500;
   digitalWrite(8, HIGH);
   fakePulse();
   delay(500);
@@ -73,18 +73,17 @@ void loop() {
   //Serial.println(recAUX);
 
   //check if aux switch is flipped. if so trigger auto pilot
-  //if(recAUX > 0 && recAUX < (ref_aux - 400)  ){
-   if (true) { 
-    digitalWrite(LED,HIGH);
+  if (recAUX > 0 && recAUX > (ref_aux + 400)){ 
+    digitalWrite(LED, HIGH);
     read_wearable();
     rud = mid_rec;
-    if (recAIL > mid_rec + 50 || recAIL < mid_rec - 50){
+    if (recAIL > mid_rec + 50 || recAIL < mid_rec - 50) {
       ail = recAIL;
     }
-    if (recELE > mid_rec + 50 || recELE < mid_rec - 50){
+    if (recELE > mid_rec + 50 || recELE < mid_rec - 50) {
       ele = recELE;
     }
-    if (recRUD > mid_rec + 50 || recRUD < mid_rec - 50){
+    if (recRUD > mid_rec + 50 || recRUD < mid_rec - 50) {
       rud = recRUD;
     }
   }
