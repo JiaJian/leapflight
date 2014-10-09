@@ -1,7 +1,7 @@
 /**
  * Project Leapflight - enabling Leap Motion to control drones via a Bluetooth stack.
  * Part of the IDA Labs drones workshop.
- * @author Jia Jian
+ * @author IDA Labs
  */
 var Leap = require('leapjs');
 var SerialPort = require('serialport').SerialPort;
@@ -10,7 +10,7 @@ var SerialPort = require('serialport').SerialPort;
 var controller = new Leap.Controller().connect();
 var serialPort = new SerialPort('COM13', {
 	baudRate: 9600
-}); // this is the openImmediately flag [default is true]
+});
 
 
 serialPort.on('open', function() {
@@ -38,9 +38,6 @@ serialPort.on('open', function() {
 				var yaw		= hand.yaw() / Math.PI * 180;
 				var x		= -1 * mapLR(roll, hand.type).toPrecision(6);
 				var y		= -1 * mapFB(pitch, hand.type).toPrecision(6);
-
-				//x = -x;
-				//y = -y;
 
 
 				console.log("LeapMotion> I'm %d% confident of the readings.", hand.confidence * 100);
@@ -89,7 +86,6 @@ function scale(value) {
 
 /**
  * Maps the rotation about the z-axis (i.e. [-180, 180] degrees) to the drone's aileron (i.e. [-250, 250]).
- * WARNING! This function compensates opposing sides.
  * @param value in degrees.
  * @param handType either left or right.
  * @return the mapped value for the drone.
@@ -125,7 +121,6 @@ function mapLR(value, handType) {
 
 /**
  * Maps the rotation about the x-axis (limited to [-80, 80] degrees) to the drone's elevation (i.e. [-250, 250]).
- * WARNING! This function compensates opposing sides.
  * @param value in degrees.
  * @param handType either left or right.
  * @return the mapped value for the drone.
