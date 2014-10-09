@@ -47,7 +47,7 @@ serialPort.on('open', function() {
 				console.log("App> Roll to drone x: %d, pitch to drone y: %d\r\n", x, y);
 
 				if (hand.confidence >= 0.25) {
-					if (x < -50 || x > 50) {
+					if (x < -20 || x > 20) {
 						output = x + "\n" + "0\n";
 					}
 					else if (y < -20 || y > 20 ) {
@@ -94,7 +94,7 @@ function mapLR(value, handType) {
 	if (handType == "left") {
 		// Compensate right side for being a left-hander.
 		if (value < 0) {
-			if ( ((value / 135) * 250) < -250) {
+			if ( ((value / 130) * 250) < -250) {
 				return -250;
 			}
 			else {
@@ -107,7 +107,7 @@ function mapLR(value, handType) {
 	else if(handType == "right") {
 		// Compensate left side for being a right-hander.
 		if (value > 0) {
-			if ( ((value / 135) * 250) > 250) {
+			if ( ((value / 130) * 250) > 250) {
 				return 250;
 			}
 			else {
